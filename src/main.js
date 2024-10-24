@@ -281,10 +281,11 @@ mainPanel.addEventListener('click', (event) => {
 mpAButton.addEventListener('click', (event) => {
     event.stopPropagation();
     if (mpMedia !== undefined && mpMediaType !== undefined) {
-        const list = mpMediaType = "movie" ? listsName[0] : listsName[1];
+        const list = mpMediaType === "movie" ? listsName[0] : listsName[1];
         addOrRemoveMediaPanel(mpMedia, list, mpAButton);
     }
 });
+
 
 async function modifyMainPanel (movieId, panel, mediaType) {
     mpMediaType = undefined;
@@ -299,6 +300,9 @@ async function modifyMainPanel (movieId, panel, mediaType) {
         mpMediaType = mediaType;
         mpMediaId = movieId;
         mpMedia = data;
+
+        const list = mediaType === "movie" ? listsName[0] : listsName[1];
+        setAddOrRemoveMediaPanel(data, list, mpAButton);
 
         if (mediaType === 'movie') {
             homeMainTitle.textContent = data.title;

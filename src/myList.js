@@ -62,6 +62,17 @@ function addOrRemoveMediaPanel (media, listName, button) {
     localStorage.setItem(listName, JSON.stringify(list));
 }
 
+function setAddOrRemoveMediaPanel (media, listName, button) {
+    const list = JSON.parse(localStorage.getItem(listName));
+    if (list[media.id]) {
+        button.textContent = mpbTranslations[language].added;
+        button.style.background = 'rgb(37 37 82)';
+    } else {
+        button.textContent = mpbTranslations[language].add;
+        button.style.background = 'none';
+    }
+}
+
 function addOrRemoveMedia (media, listName, icon, buttonType) {
     const list = JSON.parse(localStorage.getItem(listName));
 

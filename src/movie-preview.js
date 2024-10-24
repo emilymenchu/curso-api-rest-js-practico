@@ -32,8 +32,23 @@ function popupMoviePreview(movieId, mediaType) {
     moviePreview.scroll(0,0);
 }
 
+let pMediaType;
+let pMediaId;
+let pMedia;
+
+previewAddButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (pMedia !== undefined && pMediaType !== undefined) {
+        const list = pMediaType === "movie" ? listsName[0] : listsName[1];
+        addOrRemoveMediaPanel(pMedia, list, previewAddButton);
+    }
+});
 
 async function modifyPreviewPanel (movieId, mediaType) {
+    pMediaType = undefined;
+    pMediaId = undefined;
+    pMedia = undefined
+
     mpPanel.style.display = 'block';
     mpMainPanel.style.background = 'black';
     mpMainPanel.className = 'main-panel skeleton';
@@ -62,6 +77,13 @@ async function modifyPreviewPanel (movieId, mediaType) {
         const { data } = await api(`/${mediaType}/${movieId}`);
 
         console.log(data)
+
+        pMediaType = mediaType;
+        pMediaId = movieId;
+        pMedia = data;
+
+        const list = mediaType === "movie" ? listsName[0] : listsName[1];
+        setAddOrRemoveMediaPanel(data, list, previewAddButton);
         
         mpMainPanel.classList.remove = 'skeleton';
         mpMainTitle.classList.remove = 'skeleton skeleton-title'
@@ -74,8 +96,6 @@ async function modifyPreviewPanel (movieId, mediaType) {
         mpDescription.classList.remove = 'skeleton skeleton-text';
 
         pvCategoriesContainer.innerHTML = '';
-
-        previewAddButton.textContent = mpbTranslations[language].add;
 
         if (mediaType === 'person'){
             mpMainPanel.textContent = data.name;
